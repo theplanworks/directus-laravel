@@ -22,7 +22,7 @@ class DirectusLaravelServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton(DirectusLaravel::class, function ($app) {
+        $this->app->bind(DirectusLaravel::class, function ($app) {
             return new DirectusLaravel();
         });
     }

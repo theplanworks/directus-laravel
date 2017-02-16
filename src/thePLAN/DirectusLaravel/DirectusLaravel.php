@@ -1,6 +1,7 @@
 <?php namespace thePLAN\DirectusLaravel;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Psr7\Request;
 
 /**
  *
@@ -18,7 +19,7 @@ class DirectusLaravel
     private $client;
     private $base_url;
 
-    public __construct()
+    public function __construct()
     {
         $this->client = new Client();
         $this->base_url = env('DIRECTUS_CMS_URL') . '/api/1.1/';
@@ -26,16 +27,14 @@ class DirectusLaravel
 
     private function CreateRequest($params = "")
     {
-        return $this->client->request('GET', $this->base_url . $params, [
-            'headers' => [
-                'Authorization' => 'Bearer ' . env('DIRECTUS_API_KEY')
-            ]
+        return new Request('GET', $this->base_url . $params, [
+            'Authorization' => 'Bearer ' . env('DIRECTUS_API_KEY')
         ]);
     }
 
     public function getTableRows($table)
     {
         $req = $this->CreateRequest('tables/' . $table . '/rows');
-        return $this->client->send($req);
+        return $this->client->send($req)->getBody()->getContents();
     }
 }
