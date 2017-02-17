@@ -1,15 +1,17 @@
-<?php namespace thePLAN\DirectusLaravel\Data;
+<?php
+
+namespace thePLAN\DirectusLaravel\Data;
 
 use thePLAN\DirectusLaravel\Http\ApiWrapper;
 
 class ResponseParser
 {
-    private $parseFiles = false;
-    private $fileColumn = '';
+    public $parseFiles = false;
+    public $fileColumn = '';
 
     public function __construct($apiWrapper = null)
     {
-        $this->apiWrapper = ($apiWrapper == null) ? new ApiWrapper() : $apiWrapper;
+        $this->apiWrapper = ($apiWrapper == null) ? new ApiWrapper($this) : $apiWrapper;
     }
 
     public function parseData($object)

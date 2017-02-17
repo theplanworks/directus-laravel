@@ -15,7 +15,7 @@
     ],
     "autoload": {
         "psr-4": {
-            "thePLAN\\DirectusLaravel\\": "src"
+            "thePLAN\\DirectusLaravel\\": "src/"
         }
     },
     "require": {

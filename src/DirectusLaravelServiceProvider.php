@@ -1,4 +1,6 @@
-<?php namespace thePLAN\DirectusLaravel;
+<?php
+
+namespace thePLAN\DirectusLaravel;
 
 use Illuminate\Support\ServiceProvider;
 

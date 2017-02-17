@@ -1,7 +1,9 @@
-<?php namespace thePLAN\DirectusLaravel;
+<?php
+
+namespace thePLAN\DirectusLaravel;
 
 use thePLAN\DirectusLaravel\Http\ApiWrapper;
-use thePLAN\DirectusLaravel\Data\ResponseWrapper;
+use thePLAN\DirectusLaravel\Data\ResponseParser;
 use Illuminate\Support\Facades\Log;
 
 /**
@@ -22,7 +24,7 @@ class DirectusLaravel
 
     public function __construct()
     {
-        $this->parser = new ResponseWrapper();
+        $this->parser = new ResponseParser();
         $this->apiWrapper = new ApiWrapper($this->parser);
     }
 

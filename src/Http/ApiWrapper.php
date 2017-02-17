@@ -1,4 +1,6 @@
-<?php namespace thePLAN\DirectusLaravel\Http;
+<?php
+
+namespace thePLAN\DirectusLaravel\Http;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Request;
