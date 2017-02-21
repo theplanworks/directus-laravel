@@ -16,13 +16,13 @@ class ApiWrapper
     {
         $this->parser = ($parser == null) ? new ResponseParser() : $parser;
         $this->client = new Client();
-        $this->base_url = env('DIRECTUS_CMS_URL') . '/api/1.1/';
+        $this->base_url = config('directus-laravel.base_cms_url', 'https://database.account.directus.io') . '/api/1.1/';
     }
 
     private function CreateRequest($params = "")
     {
         return new Request('GET', $this->base_url . $params, [
-            'Authorization' => 'Bearer ' . env('DIRECTUS_API_KEY')
+            'Authorization' => 'Bearer ' . config('directus-laravel.api_key', '')
         ]);
     }
 

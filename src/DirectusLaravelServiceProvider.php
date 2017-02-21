@@ -18,12 +18,28 @@ use Illuminate\Support\ServiceProvider;
 class DirectusLaravelServiceProvider extends ServiceProvider
 {
     /**
+     * Perform post-registration booting of services.
+     *
+     * @return void
+     */
+    public function boot()
+    {
+        $this->publishes([
+            __DIR__ . '/config/directus-laravel.php' => config_path('directus-laravel.php'),
+        ]);
+    }
+
+    /**
      * Register bindings in the container.
      *
      * @return void
      */
     public function register()
     {
+        $this->mergeConfigFrom(
+            __DIR__ . '/config/directus-laravel.php', 'directus-laravel'
+        );
+
         $this->app->bind(DirectusLaravel::class, function ($app) {
             return new DirectusLaravel();
         });

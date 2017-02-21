@@ -4,6 +4,8 @@ namespace thePLAN\DirectusLaravel;
 
 use thePLAN\DirectusLaravel\Http\ApiWrapper;
 use thePLAN\DirectusLaravel\Data\ResponseParser;
+use thePLAN\DirectusLaravel\Resources\FileDownloader;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 
 /**
@@ -21,11 +23,13 @@ class DirectusLaravel
 {
     private $apiWrapper;
     private $parser;
+    private $ttl;
 
     public function __construct()
     {
         $this->parser = new ResponseParser();
         $this->apiWrapper = new ApiWrapper($this->parser);
+        $this->ttl = config('directus-laravel.time_to_live', 30);
     }
 
     public function getTableRows($table, $files = false, $file_col = '')
@@ -34,7 +38,10 @@ class DirectusLaravel
         $this->parser->fileColumn = $file_col;
 
         $url = 'tables/' . $table . '/rows';
-        return $this->apiWrapper->SendRequest($url, $files, $file_col);
+
+        return Cache::remember($url, $this->ttl, function () use ($url) {
+            return $this->apiWrapper->SendRequest($url);
+        });
     }
 
     public function getTableRow($table, $id, $files = false, $file_col = '')
@@ -43,6 +50,14 @@ class DirectusLaravel
         $this->parser->fileColumn = $file_col;
 
         $url = 'tables/' . $table . '/rows/' . $id;
-        return $this->apiWrapper->SendRequest($url, $files, $file_col);
+
+        return Cache::remember($url, $this->ttl, function () use ($url) {
+            return $this->apiWrapper->SendRequest($url);
+        });
+    }
+
+    public function getFile($filePath)
+    {
+        return FileDownloader::getFile($filePath);
     }
 }
