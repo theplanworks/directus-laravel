@@ -24,10 +24,13 @@ class ResponseParser
             {
                 foreach ($object->data as $key => $value)
                 {
-                    $output[] = $this->parseValue($value);
+                    if (isset($value->active) && $value->active == 1)
+                    {
+                        $output[] = $this->parseValue($value);
+                    }
                 }
             }
-            else
+            else if (isset($object->data->active) && $object->data->active == 1)
             {
                 $output = $this->parseValue($object->data);
             }
