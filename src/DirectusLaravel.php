@@ -25,37 +25,73 @@ class DirectusLaravel
     private $parser;
     private $ttl;
 
+    /**
+     * Create a new DirectusLaravel instance
+     *
+     * @return  void
+     */
     public function __construct()
     {
-        $this->parser = new ResponseParser();
+        $this->parser     = new ResponseParser();
         $this->apiWrapper = new ApiWrapper($this->parser);
-        $this->ttl = config('directus-laravel.time_to_live', 30);
+        $this->ttl        = config('directus-laravel.time_to_live', 30);
     }
 
+    /**
+     * Return an entire table as an object
+     *
+     * @param  string  $table    The table name
+     * @param  boolean $files    Parse files (default: false)
+     * @param  string  $file_col The name of the file column to parse
+     * @return object
+     */
     public function getTableRows($table, $files = false, $file_col = '')
     {
-        $this->parser->parseFiles = $files;
-        $this->parser->fileColumn = $file_col;
-
         $url = 'tables/' . $table . '/rows';
 
-        return Cache::remember($url, $this->ttl, function () use ($url) {
-            return $this->apiWrapper->SendRequest($url);
-        });
+        return $this->getData($url, $files, $file_col);
     }
 
+    /**
+     * Get a single row from a table
+     *
+     * @param  string  $table    The table name
+     * @param  int     $id       The id of the desired row
+     * @param  boolean $files    Parse files (default: false)
+     * @param  string  $file_col The name of the file column to parse
+     * @return object
+     */
     public function getTableRow($table, $id, $files = false, $file_col = '')
+    {
+        $url = 'tables/' . $table . '/rows/' . $id;
+
+        return $this->getData($url, $files, $file_col);
+    }
+
+    /**
+     * Helper function to make the API call
+     *
+     * @param  string  $url      The input URL
+     * @param  boolean $files    Parse files (default: false)
+     * @param  string  $file_col The name of the file column to parse
+     * @return object
+     */
+    protected function getData($url, $files = false, $file_col = '')
     {
         $this->parser->parseFiles = $files;
         $this->parser->fileColumn = $file_col;
 
-        $url = 'tables/' . $table . '/rows/' . $id;
-
         return Cache::remember($url, $this->ttl, function () use ($url) {
             return $this->apiWrapper->SendRequest($url);
         });
     }
 
+    /**
+     * Get a file from the CMS
+     *
+     * @param  string $filePath The path of the file
+     * @return binary
+     */
     public function getFile($filePath)
     {
         return FileDownloader::getFile($filePath);
