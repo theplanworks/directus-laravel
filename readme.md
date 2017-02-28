@@ -66,6 +66,14 @@ $value = $this->api->getTableRow($table, $id);
 
 Where `$table` is the name of the Directus table you would like to access, and `$id` is the unique ID of the record being requested.
 
+### getTableRowBySlug
+
+```php
+$value = $this->api->getTableRowBySlug($table, $slug)
+```
+
+Where `$table` is the name of the Directus table you would like to access, and `$slug` is the unique slug property of the record being requested. PREREQUISITE: A `slug` field must have been created on the table.
+
 ### getFile
 
 ```php

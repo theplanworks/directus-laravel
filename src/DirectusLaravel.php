@@ -69,6 +69,32 @@ class DirectusLaravel
     }
 
     /**
+     * Get a row by the slug property
+     *
+     * @param  string  $table    The table name
+     * @param  string  $slug     The identifying slug
+     * @param  boolean $files    Parse files (default: false)
+     * @param  string  $file_col The name of the file column to parse
+     * @return object
+     */
+    public function getTableRowBySlug($table, $slug, $files = false, $file_col = '')
+    {
+        $output = [];
+        $url = 'tables/' . $table . '/rows';
+        $rows = $this->getData($url, $files, $file_col);
+
+        foreach($rows as $row)
+        {
+            if ($row->slug == $slug)
+            {
+                return $row;
+            }
+        }
+
+        return $output;
+    }
+
+    /**
      * Helper function to make the API call
      *
      * @param  string  $url      The input URL
@@ -81,7 +107,7 @@ class DirectusLaravel
         $this->parser->parseFiles = $files;
         $this->parser->fileColumn = $file_col;
 
-        return Cache::remember($url, $this->ttl, function () use ($url) {
+        return Cache::remember($url . '?status=1', $this->ttl, function () use ($url) {
             return $this->apiWrapper->SendRequest($url);
         });
     }
