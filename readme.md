@@ -12,11 +12,15 @@ This package allows users to easily consume the REST API provided by the [Direct
 
 Install via [composer](https://getcomposer.org) using the command line:
 
-`composer require theplanworks/directus-laravel`
+```bash
+composer require theplanworks/directus-laravel
+```
 
 In Laravel 5, update the `config/app.php` providers array with the Service Provider:
 
-`thePLAN\DirectusLaravel\DirectusLaravelServiceProvider::class,`
+```php
+thePLAN\DirectusLaravel\DirectusLaravelServiceProvider::class,
+```
 
 ### Configuration
 
@@ -27,7 +31,9 @@ By default, the package is set up to use the following configuration values read
 
 If you would like to use a config file, you can publish the default config by running the following command:
 
-`php artisan vendor:publish --provider="thePLAN\DirectusLaravel\DirectusLaravelServiceProvider"`
+```bash
+php artisan vendor:publish --provider="thePLAN\DirectusLaravel\DirectusLaravelServiceProvider"
+```
 
 This will publish a config file to `config/directus-laravel.php`.
 
