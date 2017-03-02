@@ -104,10 +104,11 @@ class DirectusLaravel
      */
     protected function getData($url, $files = false, $file_col = '')
     {
+        $url .= '?status=1';
         $this->parser->parseFiles = $files;
         $this->parser->fileColumn = $file_col;
 
-        return Cache::remember($url . '?status=1', $this->ttl, function () use ($url) {
+        return Cache::remember($url, $this->ttl, function () use ($url) {
             return $this->apiWrapper->SendRequest($url);
         });
     }
